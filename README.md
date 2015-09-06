@@ -28,7 +28,7 @@ Create a bunch of EC2 instances on the fly:
 $ bees up --key <PEM-KEY> --zone <AWS_ZONE> --group <AWS_SECURITY_GROUP> --servers 10 -- instance <AWS_AMI>  --login ubuntu
 ```
 
-You must create a customized AMI, so that your simulation can run immediately after being cloned. Create a EC2 micro instance, ssh into it, run `npm install -g forever` and `git clone git@github.com:pmichelberger/websocket-bee.git`. After that, create a AMI via the AWS console and paste the received AMI id into the `bees up --instance <AWS_AMI>` parameter and execute the command from your local machine.
+You must create a customized AMI, so that your simulation can run immediately after being cloned. Create a EC2 micro instance, ssh into it, run `npm install -g forever`, `git clone git@github.com:pmichelberger/websocket-bee.git` and `cd websocket-bee && npm install`. After that, create a AMI via the AWS console and paste the received AMI id into the `bees up --instance <AWS_AMI>` parameter and execute the command from your local machine.
 
 For more info, check out this blog post: https://bocoup.com/weblog/node-stress-test-procedure/
 
