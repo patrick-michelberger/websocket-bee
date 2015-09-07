@@ -4,20 +4,20 @@ var W3CWebSocket = require('websocket').w3cwebsocket;
 var argv = require('optimist').argv;
 var clientCount = argv.clientCount || 1;
 var websocketHost = argv.websocketHost;
-var websocketPort = argv.websocketPort;
+var websocketPort = argv.websocketPort || 1337;
 
 var clients = [];
 var heartbeatInterval = 25 * 1000;
 var idx = 0;
 var intervalID;
 
-if (!websocketHost || !websocketPort) {
+if (!websocketHost || !websocketPort) { 
     console.log("Please set a websocket host with --websocketHost and a port with --websocketPort");
     return;
 }
 
 var makeConnection = function() {
-    clients[idx] = new W3CWebSocket("ws://webcdn.michelberger.info:1337");
+    clients[idx] = new W3CWebSocket("ws://" + websocketHost + ":"  + websocketPort);
 
     if (idx === clientCount) {
         process.exit();
