@@ -1,34 +1,40 @@
-var argv = require('optimist').argv;
 var W3CWebSocket = require('websocket').w3cwebsocket;
 
-var clientCount = argv.clients;
-var clients = [];
+// command-line parameters
+var argv = require('optimist').argv;
+var clientCount = argv.clientCount || 1;
+var websocketHost = argv.websocketHost;
+var websocketPort = argv.websocketPort;
 
+var clients = [];
 var heartbeatInterval = 25 * 1000;
 var idx = 0;
 var intervalID;
 
-var makeConnection = function() {
-    console.log("makeConnection...");
-    clients[idx] = new W3CWebSocket('ws://localhost:1337');
+if (!websocketHost || !websocketPort) {
+    console.log("Please set a websocket host with --websocketHost and a port with --websocketPort");
+    return;
+}
 
-    console.log(clients.length);
+var makeConnection = function() {
+    clients[idx] = new W3CWebSocket("ws://webcdn.michelberger.info:1337");
 
     if (idx === clientCount) {
+        process.exit();
         clearInterval(intervalID);
     }
 
-    clients[idx].onerror = function() {
-        console.log('Connection Error');
+    clients[idx].onerror = function(err) {
+        console.log('Connection Error: Client ' + idx);
     };
 
     clients[idx].onopen = function() {
-        console.log('WebSocket Client Connected');
+        console.log('WebSocket Connected: Client ' + idx);
 
     };
 
     clients[idx].onclose = function() {
-        console.log('echo-protocol Client Closed');
+        console.log('echo-protocol Closed: Client ' + idx);
     };
 
     clients[idx].onmessage = function(e) {
